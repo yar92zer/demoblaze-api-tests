@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class Endpoint(str, Enum):
+class Endpoint(StrEnum):
     ENTRIES = "/entries"
     BYCAT = "/bycat"
     VIEW = "/view"
