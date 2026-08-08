@@ -1,11 +1,15 @@
 import pytest
+import allure
 from utils.encoders import decode_token
+
+pytestmark = allure.feature("Авторизация")
 
 
 @pytest.mark.smoke
 @pytest.mark.auth
 def test_login_returns_token(authenticated_user):
     assert authenticated_user["token"]
+
 
 @pytest.mark.auth
 @pytest.mark.regression

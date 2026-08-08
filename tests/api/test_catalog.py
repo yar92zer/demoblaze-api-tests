@@ -1,6 +1,8 @@
 import allure
 import pytest
 
+pytestmark = allure.feature("Каталог")
+
 
 @pytest.mark.smoke
 @allure.title("Каталог возвращает 9 товаров на страницу")

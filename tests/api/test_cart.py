@@ -1,4 +1,7 @@
 import pytest
+import allure
+
+pytestmark = allure.feature("Карзина")
 
 
 @pytest.mark.smoke
