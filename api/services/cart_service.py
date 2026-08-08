@@ -1,5 +1,6 @@
 import uuid
 
+from api.models.cart import CartResponse
 from api.services.base_service import BaseService
 from config.endpoints import Endpoint
 
@@ -14,17 +15,19 @@ class CartService(BaseService):
                 "cookie": token,
                 "prod_id": product_id,
                 "flag": True,
-
             },
         )
         return item_id
 
-    def view_cart(self, token: str) -> dict:
+    def view_cart(self, token: str) -> CartResponse | dict:
         response = self.requester.post(
             Endpoint.VIEW_CART,
             payload={"cookie": token, "flag": True},
         )
-        return response.body
+        body = response.body
+        if isinstance(body, dict) and "errorMessage" in body:
+            return body
+        return CartResponse(**body)
 
     def delete_item(self, item_id: str) -> str:
         response = self.requester.post(

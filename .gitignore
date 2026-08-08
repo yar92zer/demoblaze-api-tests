@@ -34,4 +34,6 @@ allure-report/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Probe output
 probe.log

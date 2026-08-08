@@ -4,7 +4,7 @@
 метод, статус, тело ответа. Ничего не угадывает — только фиксирует факты.
 
     pip install requests
-    python probe_demoblaze.py
+    python tools/probe_demoblaze.py
 """
 
 import base64
@@ -114,6 +114,13 @@ def main():
     # --- негатив: битый токен ---
     print("\n>>> негатив: заведомо неверный cookie")
     try_both("/viewcart", {"cookie": "definitely-not-a-token", "flag": True})
+
+    # --- негатив: логин уже занят ---
+    # Регистрируем того же юзера второй раз. Проверка нужна именно здесь:
+    # успешный /signup отвечает пустым телом, и легко решить, что ошибка
+    # приходит так же. Это не так — на дубль возвращается errorMessage.
+    print("\n>>> негатив: повторная регистрация существующего логина")
+    try_both("/signup", {"username": username, "password": encoded})
 
 
 if __name__ == "__main__":

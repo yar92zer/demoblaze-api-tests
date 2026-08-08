@@ -1,10 +1,10 @@
 import pytest
 
 from api.custom_requester import CustomRequester
-from api.services.catalog_service import CatalogService
 from api.services.auth_service import AuthService
-from utils.data_generator import unique_username, DEFAULT_PASSWORD
 from api.services.cart_service import CartService
+from api.services.catalog_service import CatalogService
+from utils.data_generator import DEFAULT_PASSWORD, unique_username
 
 
 @pytest.fixture(scope="session")
