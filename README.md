@@ -1,3 +1,5 @@
+[![API Tests](https://github.com/yar92zer/demoblaze-api-tests/actions/workflows/ci.yml/badge.svg)](https://github.com/yar92zer/demoblaze-api-tests/actions/workflows/ci.yml)
+
 # Demoblaze API Test Framework
 
 Трёхслойный фреймворк для тестирования публичного API demoblaze.com.
