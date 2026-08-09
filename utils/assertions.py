@@ -7,6 +7,12 @@ def assert_no_error(body: Any) -> None:
 
 
 def assert_status_code(response, expected: int = 200) -> None:
-    assert response.status == expected, (
-        f"Ожидали {expected}, получили {response.status}, Тело: {response.body}"
+    """Проверяет HTTP-код сырого ответа requests.
+
+    У стенда любой успешный вызов приходит с 200, поэтому другой код
+    означает недоступность стенда, а не бизнес-ошибку.
+    """
+    assert response.status_code == expected, (
+        f"Стенд ответил {response.status_code}, ожидали {expected}. "
+        f"Тело: {response.text}"
     )

@@ -37,3 +37,6 @@ desktop.ini
 
 # Probe output
 probe.log
+
+# Локальные заметки, вне репозитория
+CLAUDE.md
