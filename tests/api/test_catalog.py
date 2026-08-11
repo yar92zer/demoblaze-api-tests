@@ -31,3 +31,11 @@ def test_by_category_returns_only_that_category(catalog):
 def test_get_product_by_id(catalog):
     product = catalog.get_product("1")
     assert product.id == 1
+
+
+@pytest.mark.regression
+@allure.title("Ответ катлога содержит ключ плагинации")
+def test_entries_has_pagination_key(catalog):
+    entries = catalog.get_entries()
+    assert entries.LastEvaluatedKey is not None
+    assert entries.LastEvaluatedKey.id == "9"
