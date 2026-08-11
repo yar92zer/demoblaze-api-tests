@@ -7,7 +7,7 @@ from utils.retry import with_retry
 
 class CatalogService(BaseService):
     def get_entries(self) -> EntriesResponse:
-        response = with_retry(self.requester.get, Endpoint.ENTRIES)
+        response = self.requester.get(Endpoint.ENTRIES)
         assert_no_error(response.body)
         return EntriesResponse(**response.body)
 

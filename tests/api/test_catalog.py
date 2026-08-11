@@ -5,8 +5,16 @@ pytestmark = allure.feature("Каталог")
 
 
 @pytest.mark.smoke
-@allure.title("Каталог возвращает 9 товаров на страницу")
-def test_entries_returns_nine_products(catalog):
+@allure.title("Каталог возвращает непустой список валидных товаров")
+def test_entries_returns_products(catalog):
+    entries = catalog.get_entries()
+    assert entries.Items
+    assert all(item.id and item.title and item.price > 0 for item in entries.Items)
+
+
+@pytest.mark.regression
+@allure.title("Размер страницы каталога 9 товаров")
+def test_entries_page_size(catalog):
     entries = catalog.get_entries()
     assert len(entries.Items) == 9
 

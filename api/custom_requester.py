@@ -7,6 +7,7 @@ import requests
 from config.endpoints import Endpoint
 from config.settings import BASE_URL, TIMEOUT
 from utils.assertions import assert_status_code
+from utils.retry import with_retry
 
 
 @dataclass
@@ -51,7 +52,7 @@ class CustomRequester:
         )
 
     def get(self, endpoint: Endpoint) -> ApiResponse:
-        response = self.session.get(self._url(endpoint), timeout=self.timeout)
+        response = with_retry(self.session.get,self._url(endpoint), timeout=self.timeout)
         self._log_to_allure(response)
         assert_status_code(response)
         return ApiResponse(
@@ -61,7 +62,8 @@ class CustomRequester:
         )
 
     def post(self, endpoint: Endpoint, payload: dict | None = None) -> ApiResponse:
-        response = self.session.post(self._url(endpoint), json=payload, timeout=self.timeout)
+        response = with_retry(
+            self.session.post,self._url(endpoint), json=payload, timeout=self.timeout)
         self._log_to_allure(response, payload)
         assert_status_code(response)
         return ApiResponse(
