@@ -29,5 +29,5 @@ def test_new_user_cart_is_empty(cart, authenticated_user):
 @pytest.mark.negative
 @allure.title("Некорректный токен возвращает ошибку в теле ответа")
 def test_malformed_token_returns_error(cart):
-    body = cart.view_cart("definitely-not-a-token")
-    assert "errorMessage" in body
+    with pytest.raises(AssertionError, match="token malformed"):
+        cart.view_cart("definitely-not-a-token")

@@ -16,9 +16,9 @@ class AuthService(BaseService):
             Endpoint.LOGIN,
             payload={"username": username, "password": password},
         )
+        assert_no_error(response.body)
+
         body = response.body
         if not isinstance(body, str) or ":" not in body:
-            raise AssertionError(
-                f"Ожидали строку вида 'Auth_token: <...>', получили: {body!r}"
-            )
+            raise AssertionError(f"Ожидали строку вида 'Auth_token: <...>', получили: {body!r}")
         return body.split(":", 1)[1].strip()
