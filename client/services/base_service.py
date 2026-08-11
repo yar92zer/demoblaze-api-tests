@@ -1,4 +1,4 @@
-from api.custom_requester import CustomRequester
+from client.custom_requester import CustomRequester
 
 
 class BaseService:

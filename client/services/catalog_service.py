@@ -1,8 +1,7 @@
-from api.models.product import EntriesResponse, Product
-from api.services.base_service import BaseService
-from config.endpoints import Endpoint
+from client.endpoints import Endpoint
+from client.models.product import EntriesResponse, Product
+from client.services.base_service import BaseService
 from utils.assertions import assert_no_error
-from utils.retry import with_retry
 
 
 class CatalogService(BaseService):

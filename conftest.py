@@ -1,9 +1,9 @@
 import pytest
 
-from api.custom_requester import CustomRequester
-from api.services.auth_service import AuthService
-from api.services.cart_service import CartService
-from api.services.catalog_service import CatalogService
+from client.custom_requester import CustomRequester
+from client.services.auth_service import AuthService
+from client.services.cart_service import CartService
+from client.services.catalog_service import CatalogService
 from utils.data_generator import DEFAULT_PASSWORD, unique_username
 
 

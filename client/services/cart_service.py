@@ -1,8 +1,8 @@
 import uuid
 
-from api.models.cart import CartResponse
-from api.services.base_service import BaseService
-from config.endpoints import Endpoint
+from client.endpoints import Endpoint
+from client.models.cart import CartResponse
+from client.services.base_service import BaseService
 from utils.assertions import assert_no_error
 
 

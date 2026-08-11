@@ -9,14 +9,14 @@
 для прогона нужен интернет, и красный прогон может означать недоступность
 чужого сервиса, а не поломку кода.
 
-Контракт API вынесен в отдельный документ: [docs/api-contract.md](docs/api-contract.md).
+Контракт API вынесен в отдельный документ: [api-contract.md](api-contract.md).
 
 ## Стек
 Python 3.11, pytest, requests, Pydantic, Allure, GitHub Actions
 
 ## Что покрыто
 
-9 тестов на три домена: каталог, авторизация, корзина. Маркеры для
+11 тестов на три домена: каталог, авторизация, корзина. Маркеры для
 выборочного прогона: `smoke`, `regression`, `negative`, `auth`, `cart`
 (объявлены в `pytest.ini`).
 
@@ -29,27 +29,27 @@ CustomRequester → Service → Tests
 Allure-вложения. Смена транспорта или формата ответа затрагивает один слой.
 
 ```
-api/
+client/                 клиент к внешнему API demoblaze
   custom_requester.py   транспорт: сессия, таймауты, разбор тела, логи в Allure
+  endpoints.py          пути эндпоинтов одним Enum
   services/             бизнес-операции: catalog, auth, cart
   models/               Pydantic-валидация ответов: product, cart
-config/
-  settings.py           base_url, таймаут, ретраи — из .env
-  endpoints.py          пути эндпоинтов одним Enum
 utils/
   data_generator.py     уникальный логин на каждый тест
   assertions.py         assert_no_error, assert_status_code
   encoders.py           base64: encode_password, decode_token
   retry.py              with_retry поверх tenacity
 tests/
-  conftest.py           фикстуры: requester, сервисы, authenticated_user,
-                        cart_with_product (с teardown)
   api/                  test_catalog, test_auth, test_cart
-tools/
-  probe_demoblaze.py    разведка контракта: чем снят docs/api-contract.md
-docs/
-  api-contract.md       подтверждённый контракт стенда
+settings.py             base_url, таймаут, ретраи — из .env
+conftest.py             фикстуры: requester, сервисы, authenticated_user,
+                        cart_with_product (с teardown)
+probe_demoblaze.py      разведка контракта: чем снят api-contract.md
+api-contract.md         подтверждённый контракт стенда
 ```
+
+Слой клиента назван `client/`, а не `api/`, чтобы не сталкиваться по имени
+с `tests/api/`. Когда добавится UI, рядом встанет `pages/`.
 
 ## Запуск
 
@@ -63,11 +63,23 @@ pytest -v
 Отдельные наборы по маркерам:
 
 ```bash
-pytest -m smoke          # критичный минимум
-pytest -m regression     # полный прогон
-pytest -m negative       # невалидные данные и битые токены
+pytest                   # весь набор, 11 тестов
+pytest -m smoke          # критичный минимум, 4
+pytest -m regression     # расширенные позитивные проверки, 5
+pytest -m negative       # невалидные данные и битые токены, 2
+pytest -m auth           # домен: signup / login, 4
+pytest -m cart           # домен: корзина, 3
 pytest -n 4              # параллельно
 ```
+
+Маркеры двух видов и не взаимозаменяемы. `smoke`, `regression` и `negative`
+задают уровень: каждый тест несёт ровно один из трёх, вместе они дают все 11.
+`auth` и `cart` задают домен и вешаются поверх уровня.
+
+Отсюда важное: **`-m regression` — это не полный прогон**, а только пять
+расширенных позитивных проверок; негативные сценарии в него не попадают.
+Полный прогон — просто `pytest` без `-m`. В CI на каждый коммит уходит
+`-m smoke`.
 
 Отчёт Allure:
 
@@ -79,7 +91,7 @@ allure serve allure-results
 ## Конфигурация
 
 Работает без настройки — значения по умолчанию зашиты в
-`config/settings.py`. Чтобы переопределить, скопируйте `.env.example`
+`settings.py`. Чтобы переопределить, скопируйте `.env.example`
 в `.env`:
 
 ```ini
@@ -148,9 +160,9 @@ Python 3.11 и гоняется `pytest -m smoke`. Результаты Allure �
   корзины удаляются в teardown. Это даёт возможность запускать прогон
   параллельно.
 - **Документации API нет.** Контракт снят разведочным скриптом
-  `tools/probe_demoblaze.py`: он определяет HTTP-метод по ответу сервера и
+  `probe_demoblaze.py`: он определяет HTTP-метод по ответу сервера и
   фиксирует форму запроса и ответа для каждого эндпоинта. Результат —
-  [docs/api-contract.md](docs/api-contract.md); там же тела всех запросов
+  [api-contract.md](api-contract.md); там же тела всех запросов
   и ответов, включая негативные.
 - **Удаления пользователей в API нет**, поэтому тестовые аккаунты остаются
   на стенде. Логины имеют префикс `qa_`.
@@ -169,6 +181,6 @@ Python 3.11 и гоняется `pytest -m smoke`. Результаты Allure �
 | 5 | `/signup` при успехе возвращает пустое тело (`""`) — подтверждения операции в ответе нет. | Minor |
 | 6 | Мусор в данных каталога: у товара id=9 в поле `title` хвостовой перевод строки (`"Sony vaio i7\n"`); картинки дублируются — id=4 ссылается на изображение товара id=1 (`galaxy_s6.jpg`), id=9 — на изображение товара id=8 (`sony_vaio_5.jpg`). | Trivial |
 
-Дефекты 1 и 2 зафиксированы автотестами (`test_token_contains_username`,
+Дефекты 1 и 2 зафиксированы автотестами (`test_token_is_reversible`,
 `test_malformed_token_returns_error`) — тесты проверяют фактическое
 поведение и упадут, если оно изменится.

@@ -1,7 +1,7 @@
 import requests
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
-from config.settings import RETRY_ATTEMPTS
+from settings import RETRY_ATTEMPTS
 
 
 @retry(

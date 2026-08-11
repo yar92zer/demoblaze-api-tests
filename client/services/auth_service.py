@@ -1,5 +1,5 @@
-from api.services.base_service import BaseService
-from config.endpoints import Endpoint
+from client.endpoints import Endpoint
+from client.services.base_service import BaseService
 from utils.assertions import assert_no_error
 
 

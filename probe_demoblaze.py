@@ -4,7 +4,7 @@
 метод, статус, тело ответа. Ничего не угадывает — только фиксирует факты.
 
     pip install requests
-    python tools/probe_demoblaze.py
+    python probe_demoblaze.py
 """
 
 import base64
