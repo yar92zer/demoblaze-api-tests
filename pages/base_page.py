@@ -1,5 +1,7 @@
 """Базовый Page Object: общие действия поверх Playwright."""
+import time
 from urllib.parse import urljoin
+
 from playwright.sync_api import Page
 
 
@@ -47,3 +49,37 @@ class BasePage:
         Без `timeout` используется значение из настроек.
         """
         self.page.locator(locator).wait_for(state="visible", timeout=timeout or self.timeout)
+
+    def click_expecting_alert(self, locator: str, accept: bool = True) -> str:
+        """Кликнуть и вернуть текст нативного диалога.
+
+        Обработчик вешается ДО клика намеренно. Demoblaze показывает
+        алерты двумя способами: часть — синхронно прямо в обработчике
+        onclick (`purchaseOrder`, `send`), часть — из коллбэка AJAX
+        (`addToCart`, `logIn`). В синхронном случае alert блокирует
+        страницу, и `click()` не вернёт управление, пока диалог не снят,
+        поэтому обёртка `expect_event` вокруг клика уходит в дедлок.
+        Здесь же диалог снимается сразу, а текст остаётся сохранённым.
+
+        Без обработчика Playwright закрывает диалог сам и текст теряется.
+        """
+        captured: list[str] = []
+
+        def handler(dialog) -> None:
+            captured.append(dialog.message)
+            if accept:
+                dialog.accept()
+            else:
+                dialog.dismiss()
+
+        self.page.once("dialog", handler)
+        self.click(locator)
+
+        # Асинхронный алерт приходит уже после возврата из click.
+        deadline = time.monotonic() + self.timeout / 1000
+        while not captured and time.monotonic() < deadline:
+            self.page.wait_for_timeout(50)
+
+        if not captured:
+            raise AssertionError(f"Диалог не появился после клика по {locator!r}")
+        return captured[0]
