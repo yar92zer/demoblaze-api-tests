@@ -8,26 +8,44 @@ on:
   workflow_dispatch:
 
 jobs:
-  smoke:
+  api:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
-
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Run smoke tests
-        run: pytest -m smoke --alluredir=allure-results
-
+      - name: Run api smoke tests
+        run: pytest tests/api -m smoke --alluredir=allure-results
       - name: Upload allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-api
+          path: allure-results
+
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Install browsers
+        run: playwright install --with-deps chromium
+      - name: Run ui smoke tests
+        run: pytest tests/ui -m smoke --alluredir=allure-results
+      - name: Upload allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-ui
           path: allure-results
