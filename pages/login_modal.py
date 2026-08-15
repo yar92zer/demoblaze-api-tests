@@ -9,7 +9,7 @@ class LoginModal(BasePage):
     SUBMIT_BUTTON = "#logInModal button.btn-primary"
     CLOSE_BUTTON = "#logInModal button.btn-secondary"
 
-    def wait_opened(self) -> None:
+    def wait_open(self) -> None:
         # Дождаться, пока модалка полностью раскроется.
         self.page.locator(f"{self.MODAL}.show").wait_for(
             state="visible", timeout=self.timeout
@@ -23,7 +23,7 @@ class LoginModal(BasePage):
         self.click(self.SUBMIT_BUTTON)
 
     def login_expecting_alert(self, username: str, password: str) -> str:
-        # То, жн но для негативных сценариев: вернуть текст алерата.
+        # То, же но для негативных сценариев: вернуть текст алерата.
         self.wait_open()
         self.fill(self.USERNAME_INPUT, username)
         self.fill(self.PASSWORD_INPUT, password)

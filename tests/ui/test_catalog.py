@@ -5,7 +5,7 @@ pytestmark = [pytest.mark.ui, allure.feature("Каталог UI")]
 
 
 @pytest.mark.smoke
-@allure.title("Витрина открывается в показывает товары")
+@allure.title("Витрина открывается в показывает и товары")
 def test_catalog_shows_products(home_page):
     home_page.open()
     assert home_page.get_products_count() == 9
@@ -20,7 +20,7 @@ def test_category_filters_products(home_page):
 
 
 @pytest.mark.regression
-@allure.title("Периход на следующую страницу меняет набор товаров")
+@allure.title("Переход на следующую страницу меняет набор товаров")
 def test_next_page_shows_other_products(home_page):
     home_page.open()
     first = home_page.get_product_titles()
@@ -31,7 +31,7 @@ def test_next_page_shows_other_products(home_page):
 
 @pytest.mark.smoke
 @allure.title("Клик по товару открывает его карточку")
-def test_open_product_cart(home_page, product_page):
+def test_open_product_card(home_page, product_page):
     home_page.open()
     home_page.open_product("Nexus 6")
     assert product_page.get_title() == "Nexus 6"
