@@ -1,6 +1,5 @@
 import pytest
 
-from utils.data_generator import unique_username, DEFAULT_PASSWORD
 from utils.encoders import encode_password
 from pages.header import Header
 from pages.home_page import HomePage
@@ -14,7 +13,8 @@ from client.services.auth_service import AuthService
 from client.services.cart_service import CartService
 from client.services.catalog_service import CatalogService
 from utils.data_generator import DEFAULT_PASSWORD, unique_username
-
+from pages.contact_modal import ContactModal
+from pages.order_modal import OrderModal
 
 UI_TIMEOUT = TIMEOUT * 1000
 
@@ -57,7 +57,6 @@ def logged_in_user(page, home_page, header, login_modal, registered_user):
     header.open_login_modal()
     with page.expect_navigation():
         login_modal.login(registered_user["username"], registered_user["password"])
-
     page.locator(header.USERNAME_LABEL).wait_for(state="visible", timeout=UI_TIMEOUT)
     return registered_user
 
@@ -65,6 +64,7 @@ def logged_in_user(page, home_page, header, login_modal, registered_user):
 @pytest.fixture
 def cart_page(page):
     return CartPage(page, FRONT_URL, UI_TIMEOUT)
+
 
 @pytest.fixture(scope="session")
 def requester():
@@ -99,3 +99,13 @@ def cart_with_product(cart, authenticated_user):
     item_id = cart.add_to_cart(authenticated_user["token"], product_id=1)
     yield {"item_id": item_id, "token": authenticated_user["token"]}
     cart.delete_item(item_id)
+
+
+@pytest.fixture
+def order_modal(page):
+    return OrderModal(page, FRONT_URL, UI_TIMEOUT)
+
+
+@pytest.fixture
+def contact_modal(page):
+    return ContactModal(page, FRONT_URL, UI_TIMEOUT)
