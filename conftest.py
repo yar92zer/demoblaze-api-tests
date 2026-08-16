@@ -1,4 +1,5 @@
 import pytest
+import allure
 
 from utils.encoders import encode_password
 from pages.header import Header
@@ -109,3 +110,25 @@ def order_modal(page):
 @pytest.fixture
 def contact_modal(page):
     return ContactModal(page, FRONT_URL, UI_TIMEOUT)
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+    if report.when != "call" or not report.failed:
+        return
+    page = item.funcargs.get("page")
+    if page is None:
+        return
+
+    allure.attach(
+        page.screenshot(full_page=True),
+        name="Скриншот при падении",
+        attachment_type=allure.attachment_type.PNG,
+    )
+    allure.attach(
+        page.url,
+        name="URL",
+        attachment_type=allure.attachment_type.TEXT,
+    )
