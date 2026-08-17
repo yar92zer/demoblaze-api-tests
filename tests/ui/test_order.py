@@ -1,5 +1,6 @@
 import allure
 import pytest
+
 from utils.data_generator import order_data
 
 pytestmark = [pytest.mark.ui, allure.feature("Оформление заказа")]

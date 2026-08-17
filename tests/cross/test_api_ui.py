@@ -1,5 +1,6 @@
 import allure
 import pytest
+
 from utils.encoders import encode_password
 
 pytestmark = [pytest.mark.cross, allure.feature("Сквозные сценарии")]

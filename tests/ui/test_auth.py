@@ -1,7 +1,7 @@
 import allure
 import pytest
 
-from utils.data_generator import unique_username, DEFAULT_PASSWORD
+from utils.data_generator import DEFAULT_PASSWORD, unique_username
 
 pytestmark = [pytest.mark.ui, pytest.mark.auth, allure.feature("Авторизация UI")]
 

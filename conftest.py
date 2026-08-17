@@ -1,21 +1,21 @@
-import pytest
 import allure
+import pytest
 
-from utils.encoders import encode_password
-from pages.header import Header
-from pages.home_page import HomePage
-from pages.login_modal import LoginModal
-from pages.product_page import ProductPage
-from pages.signup_modal import SignupModal
-from settings import FRONT_URL, TIMEOUT
-from pages.cart_page import CartPage
 from client.custom_requester import CustomRequester
 from client.services.auth_service import AuthService
 from client.services.cart_service import CartService
 from client.services.catalog_service import CatalogService
-from utils.data_generator import DEFAULT_PASSWORD, unique_username
+from pages.cart_page import CartPage
 from pages.contact_modal import ContactModal
+from pages.header import Header
+from pages.home_page import HomePage
+from pages.login_modal import LoginModal
 from pages.order_modal import OrderModal
+from pages.product_page import ProductPage
+from pages.signup_modal import SignupModal
+from settings import FRONT_URL, TIMEOUT
+from utils.data_generator import DEFAULT_PASSWORD, unique_username
+from utils.encoders import encode_password
 
 UI_TIMEOUT = TIMEOUT * 1000
 

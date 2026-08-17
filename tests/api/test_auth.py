@@ -1,7 +1,7 @@
 import allure
 import pytest
 
-from utils.data_generator import unique_username, DEFAULT_PASSWORD
+from utils.data_generator import DEFAULT_PASSWORD, unique_username
 from utils.encoders import decode_token, encode_password
 
 pytestmark = allure.feature("Авторизация")

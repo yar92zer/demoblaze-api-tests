@@ -1,5 +1,7 @@
 from collections.abc import Callable
+
 from playwright.sync_api import Response
+
 from pages.base_page import BasePage
 
 

@@ -1,5 +1,6 @@
-from pages.base_page import BasePage
 from playwright.sync_api import Dialog
+
+from pages.base_page import BasePage
 
 
 class SignupModal(BasePage):
