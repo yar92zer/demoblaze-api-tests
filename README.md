@@ -1,6 +1,6 @@
-[![Tests](https://github.com/yar92zer/demoblaze-api-tests/actions/workflows/ci.yml/badge.svg)](https://github.com/yar92zer/demoblaze-api-tests/actions/workflows/ci.yml)
+[![Tests](https://github.com/yar92zer/demoblaze-test-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/yar92zer/demoblaze-test-framework/actions/workflows/ci.yml)
 
-[Allure-отчёт последнего прогона](https://yar92zer.github.io/demoblaze-api-tests/)
+[Allure-отчёт последнего прогона](https://github.com/yar92zer/demoblaze-test-framework)
 
 # Demoblaze Test Framework
 
