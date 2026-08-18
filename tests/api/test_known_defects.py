@@ -3,9 +3,7 @@ import pytest
 
 from client.endpoints import Endpoint
 
-pytestmark = [pytest.mark.regression,
-              allure.feature("Известные дефекты стенда")
-              ]
+pytestmark = [allure.feature("Известные дефекты стенда")]
 
 
 @pytest.mark.negative
@@ -13,7 +11,7 @@ pytestmark = [pytest.mark.regression,
     reason="Дефект /deleteitem не требует токена, позиция удаляется по одному id",
     strict=True,
 )
-@allure.title("Позицию корзины нельзя удалить без токена валадельца")
+@allure.title("Позицию корзины нельзя удалить без токена владельца")
 def test_cart_item_cannot_be_deleted_without_owner_token(cart, authenticated_user):
     item_id = cart.add_to_cart(authenticated_user["token"], product_id=1)
     with pytest.raises(AssertionError):
