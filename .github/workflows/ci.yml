@@ -54,8 +54,14 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Cache browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-1.62.0
       - name: Install browsers
-        run: playwright install --with-deps chromium
+        timeout-minutes: 5
+        run: playwright install chromium
       - name: Run ui smoke tests
         run: pytest tests/ui -m smoke -n 2 --alluredir=allure-results
       - name: Upload allure results
@@ -77,8 +83,14 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Cache browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-1.62.0
       - name: Install browsers
-        run: playwright install --with-deps chromium
+        timeout-minutes: 5
+        run: playwright install chromium
       - name: Run full suite
         run: pytest -n 2 --alluredir=allure-results
       - name: Upload allure results
