@@ -63,3 +63,11 @@ def test_login_unknown_user(home_page, header, login_modal):
     header.open_login_modal()
     message = login_modal.login_expecting_alert(unique_username(), DEFAULT_PASSWORD)
     assert message == "User does not exist."
+
+@pytest.mark.negative
+@allure.title("Вход c пустыми полями отклоняется")
+def test_login_empty_fields(home_page, header, login_modal):
+    home_page.open()
+    header.open_login_modal()
+    message= login_modal.login_expecting_alert("", DEFAULT_PASSWORD)
+    assert message == "Please fill out Username and Password."
