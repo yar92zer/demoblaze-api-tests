@@ -1,4 +1,3 @@
-"""Базовый Page Object: общие действия поверх Playwright."""
 import time
 from urllib.parse import urljoin
 

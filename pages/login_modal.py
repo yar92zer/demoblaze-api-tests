@@ -1,5 +1,3 @@
-from playwright.sync_api import Dialog
-
 from pages.base_page import BasePage
 
 
@@ -24,13 +22,8 @@ class LoginModal(BasePage):
         self.click(self.SUBMIT_BUTTON)
 
     def login_expecting_alert(self, username: str, password: str) -> str:
-        # То, же но для негативных сценариев: вернуть текст алерата.
+        # Алерт прилетает из AJAX-коллбэка logIn(), поэтому хелпер, а не expect_event.
         self.wait_open()
         self.fill(self.USERNAME_INPUT, username)
         self.fill(self.PASSWORD_INPUT, password)
-        with self.page.expect_event("dialog") as dialog_info:
-            self.click(self.SUBMIT_BUTTON)
-        dialog: Dialog = dialog_info.value
-        message = dialog.message
-        dialog.accept()
-        return message
+        return self.click_expecting_alert(self.SUBMIT_BUTTON)

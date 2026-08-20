@@ -1,5 +1,3 @@
-from playwright.sync_api import Dialog
-
 from pages.base_page import BasePage
 
 
@@ -22,9 +20,4 @@ class SignupModal(BasePage):
         self.wait_open()
         self.fill(self.USERNAME_INPUT, username)
         self.fill(self.PASSWORD_INPUT, password)
-        with self.page.expect_event("dialog") as dialog_info:
-            self.click(self.SUBMIT_BUTTON)
-        dialog: Dialog = dialog_info.value
-        message = dialog.message
-        dialog.accept()
-        return message
+        return self.click_expecting_alert(self.SUBMIT_BUTTON)
