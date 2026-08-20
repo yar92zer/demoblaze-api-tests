@@ -99,13 +99,11 @@ def cart(requester):
 def cart_with_product(cart, authenticated_user):
     item_id = cart.add_to_cart(authenticated_user["token"], product_id=1)
     yield {"item_id": item_id, "token": authenticated_user["token"]}
-    cart.delete_item(item_id)
     try:
         cart.delete_item(item_id)
     except AssertionError:
-        # Стенд иногда отвечает "Not found." на только что созданную
-        # позицию. Уборка best-effort: упавший teardown красит
-        # прошедший тест и ничего не говорит о качестве продукта.
+        # Уборка best-effort: стенд иногда отвечает "Not found.".
+        # а упавший teardown красит прошедший тест.
         pass
 
 

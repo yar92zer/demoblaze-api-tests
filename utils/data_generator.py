@@ -13,7 +13,7 @@ def unique_username() -> str:
 def order_data() -> dict[str, str]:
     return {
         "name": fake.name(),
-        "contact": fake.country(),
+        "country": fake.country(),
         "city": fake.city(),
         "card": fake.credit_card_number(),
         "month": str(fake.random_int(1, 12)),
