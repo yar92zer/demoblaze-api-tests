@@ -5,7 +5,7 @@ pytestmark = [pytest.mark.ui, allure.feature("Обратная связь")]
 
 
 @pytest.mark.smoke
-@allure.title("Форма обратоной связи показывает подтверждение отправки")
+@allure.title("Форма обратной связи показывает подтверждение отправки")
 def test_contact_form_shows_confirmation(home_page, header, contact_modal):
     home_page.open()
     header.open_contact_modal()
@@ -17,7 +17,7 @@ def test_contact_form_shows_confirmation(home_page, header, contact_modal):
 
 
 @pytest.mark.regression
-@allure.title("Форма обратоной связи не отправляет данные на бэкенд")
+@allure.title("Форма обратной связи не отправляет данные на бэкенд")
 def test_contact_form_sends_nothing_to_backend(page, home_page, header, contact_modal):
     home_page.open()
     header.open_contact_modal()

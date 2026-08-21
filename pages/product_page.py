@@ -10,30 +10,27 @@ class ProductPage(BasePage):
     IMAGE = "#imgp img"
 
     def open_by_id(self, product_id: int) -> None:
-        # Открыть карточку напрямую по идентификатору товара.
         self.open(f"{self.url_path}?idp_={product_id}")
         self.wait_for_product()
 
     def wait_for_product(self):
-        # Дождаться,пока скртпт нарисует карточку.
+        # Дождаться,пока скрипт нарисует карточку.
         self.wait_visible(self.TITLE)
 
     def get_title(self) -> str:
-        # Название товара.
         self.wait_for_product()
         return self.get_text(self.TITLE).strip()
 
     def get_description(self) -> str:
-        # Описание товара.
         self.wait_for_product()
         return self.get_text(self.DESCRIPTION).strip()
 
     def add_to_cart(self) -> str:
-        # добвить товар в корзину, вернуть текатст алерта.
         self.wait_for_product()
         return self.click_expecting_alert(self.ADD_TO_CART_BUTTON)
 
-    def get_price(self)-> str:
-        #Цена как на витрине $650.
+    def get_price(self) -> str:
+        # Цена и налог лежат в одном h3: "$650 *includes tax".
+        # Отрезаем хвост, чтобы сравнивать с ценой на витрине.
         self.wait_for_product()
         return self.get_text(self.PRICE).split("*")[0].strip()

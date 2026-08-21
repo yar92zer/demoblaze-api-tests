@@ -3,12 +3,15 @@ import pytest
 
 pytestmark = [pytest.mark.ui, allure.feature("Каталог UI")]
 
+CATALOG_PAGE_SIZE = 9
+PHONE_CATEGORY_SIZE = 7
+
 
 @pytest.mark.smoke
-@allure.title("Витрина открывается в показывает и товары")
+@allure.title("Витрина открывается и показывает товары")
 def test_catalog_shows_products(home_page):
     home_page.open()
-    assert home_page.get_products_count() == 9
+    assert home_page.get_products_count() == CATALOG_PAGE_SIZE
 
 
 @pytest.mark.regression
@@ -16,7 +19,7 @@ def test_catalog_shows_products(home_page):
 def test_category_filters_products(home_page):
     home_page.open()
     home_page.open_category("Phones")
-    assert home_page.get_products_count() == 7
+    assert home_page.get_products_count() == PHONE_CATEGORY_SIZE
 
 
 @pytest.mark.regression

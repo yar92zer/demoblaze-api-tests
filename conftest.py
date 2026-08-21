@@ -48,6 +48,8 @@ def header(page):
 @pytest.fixture
 def registered_user(auth):
     username = unique_username()
+    # Фронт гонит пароль через b64EncodeUnicode перед отправкой, поэтому
+    # в базе должен лежать base64, а в форму вводится открытый пароль.
     auth.signup(username, encode_password(DEFAULT_PASSWORD))
     return {"username": username, "password": DEFAULT_PASSWORD}
 
@@ -56,6 +58,8 @@ def registered_user(auth):
 def logged_in_user(page, home_page, header, login_modal, registered_user):
     home_page.open()
     header.open_login_modal()
+    # logIn() в success-колбэке делает location.reload(): без перехвата
+    # навигации следующая команда попадёт в уничтоженный контекст.
     with page.expect_navigation():
         login_modal.login(registered_user["username"], registered_user["password"])
     page.locator(header.USERNAME_LABEL).wait_for(state="visible", timeout=UI_TIMEOUT)
@@ -102,7 +106,7 @@ def cart_with_product(cart, authenticated_user):
     try:
         cart.delete_item(item_id)
     except AssertionError:
-        # Уборка best-effort: стенд иногда отвечает "Not found.".
+        # Уборка best-effort: стенд иногда отвечает "Not found."
         # а упавший teardown красит прошедший тест.
         pass
 
